@@ -8,10 +8,11 @@
         <textarea v-model="input1_config" cols="100" rows="10"></textarea>
       </div>
 
-      <button v-on:click="onClick">click</button>
+      <button v-on:click="onClick">読み込み</button>
+      <button v-on:click="onClickSave">保存</button>
 
       <div>
-        <p>入力2</p>
+        <p>コメント行除去</p>
         <textarea v-model="input2_config" cols="100" rows="10"></textarea>
       </div>
 
@@ -73,6 +74,10 @@ export default class HelloWorld extends Vue {
 
     console.log(this.list)
   }
+
+  onClickSave() {
+    this.output_config = this.list.join('\n')
+  }
 }
 </script>
 
@@ -102,7 +107,6 @@ a {
 .editer-frame {
   flex-direction: column;
   height: 80vh;
-  
 }
 
 .editer-list {
