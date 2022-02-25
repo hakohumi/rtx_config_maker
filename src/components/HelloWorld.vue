@@ -1,48 +1,118 @@
 <template>
-  <h1>RTX Config Maker</h1>
-
-  <div class="flex center">
-    <div class="input">
-      <div>
-        <p>入力1</p>
-        <textarea v-model="input1_config" cols="100" rows="10"></textarea>
-      </div>
-
-      <button @click="onClickRead">読み込み</button>
-      <button @click="onClickSave">保存</button>
-
-      <div>
-        <p>コメント行除去</p>
-        <textarea v-model="input2_config" cols="100" rows="10"></textarea>
-      </div>
-
-      <p>出力</p>
-      <textarea v-model="output_config" cols="100" rows="10"></textarea>
-    </div>
-
-    <div class="flex editer-frame">
+  <div class="root">
+    <header>
+      <h1>RTX Config Maker</h1>
+    </header>
+    <main>
       <div class="flex center">
-        <!-- TODO: 後でボタンにする -->
-        <button @click="current_tab_mode = 'all'">all</button>
-        <button @click="current_tab_mode = 'ipv4'">ipv4</button>
-        <button @click="current_tab_mode = 'ipv6'">ipv6</button>
-        <button @click="current_tab_mode = 'dns'">dns</button>
-        <button @click="current_tab_mode = 'dhcp'">dhcp</button>
-        <button @click="current_tab_mode = 'nat'">nat</button>
-        <button @click="current_tab_mode = 'other'">other</button>
-        <button @click="current_tab_mode = 'filter_ipv4'">filter_ipv4</button>
-        <button @click="current_tab_mode = 'filter_ipv6'">filter_ipv6</button>
-      </div>
+        <div id="frame-input">
+          <div>
+            <p>入力1</p>
+            <textarea v-model="input1_config" cols="100" rows="10"></textarea>
+          </div>
 
-      <div class="editer-list">
-        <li v-for="item in current_view_list" :key="item">
-          <input type="text" :value="item" size="150" />
-        </li>
+          <button @click="onClickRead">読み込み</button>
+          <button @click="onClickSave">保存</button>
+
+          <div>
+            <p>コメント行除去</p>
+            <textarea v-model="input2_config" cols="100" rows="10"></textarea>
+          </div>
+
+          <p>出力</p>
+          <textarea v-model="output_config" cols="100" rows="10"></textarea>
+        </div>
+
+        <div id="frame-editor" class="flex-x">
+          <div class="flex center-block">
+            <button @click="current_tab_mode = 'all'">all</button>
+            <button @click="current_tab_mode = 'ipv4'">ipv4</button>
+            <button @click="current_tab_mode = 'ipv6'">ipv6</button>
+            <button @click="current_tab_mode = 'dns'">dns</button>
+            <button @click="current_tab_mode = 'dhcp'">dhcp</button>
+            <button @click="current_tab_mode = 'nat'">nat</button>
+            <button @click="current_tab_mode = 'other'">other</button>
+            <button @click="current_tab_mode = 'filter_ipv4'">
+              filter_ipv4
+            </button>
+            <button @click="current_tab_mode = 'filter_ipv6'">
+              filter_ipv6
+            </button>
+          </div>
+
+          <div class="editer-list">
+            <li v-for="item in current_view_list" :key="item">
+              <input type="text" :value="item" size="150" />
+            </li>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+
+.root {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+main {
+  /* background-color: #e1edff; */
+  display: flex;
+  flex-flow: column wrap;
+  padding: 0 2%;
+}
+
+.center{
+  text-align: center;
+}
+
+.center-block {
+  width: 80%;
+  margin: 0 auto;
+  justify-content: space-around;
+}
+
+#frame-input {
+  flex-basis: 30%;
+}
+
+#frame-editor {
+  flex-basis: auto;
+  overflow-x: scroll;
+}
+
+.flex-x {
+  flex-direction: column;
+}
+
+.editer-list {
+  overflow-y: scroll;
+  height: 80vh;
+  /* width: 100%; */
+}
+
+.lists {
+}
+
+.flex {
+  display: flex;
+}
+</style>
 <script lang="ts">
 /* eslint-disable no-unused-vars */
 import { Vue } from 'vue-class-component'
@@ -140,43 +210,3 @@ export default class HelloWorld extends Vue {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
-.center {
-  width: 80%;
-  margin: 0 auto;
-  justify-content: space-around;
-}
-
-.input {
-}
-
-.editer-frame {
-  flex-direction: column;
-  height: 80vh;
-}
-
-.editer-list {
-  overflow-y: scroll;
-  height: 100%;
-}
-
-.lists {
-}
-.flex {
-  display: flex;
-}
-</style>
