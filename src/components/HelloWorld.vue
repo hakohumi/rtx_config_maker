@@ -41,9 +41,14 @@
           </div>
 
           <div class="editer-list">
-            <li v-for="item in current_view_list" :key="item">
-              <input type="text" :value="item" size="150" />
-            </li>
+            <draggable v-model="current_view_list" draggable=".item">
+              <li v-for="item in current_view_list" :key="item.id" class="item">
+                <div>
+                  fafafa
+                  <input type="text" :value="item.line" size="150" />
+                </div>
+              </li>
+            </draggable>
           </div>
         </div>
       </div>
@@ -115,7 +120,8 @@ main {
 </style>
 <script lang="ts">
 /* eslint-disable no-unused-vars */
-import { Vue } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component'
+import draggable from 'vuedraggable'
 
 type TAB_MODE =
   | 'all'
@@ -128,26 +134,35 @@ type TAB_MODE =
   | 'filter_ipv4'
   | 'filter_ipv6'
 
+interface IndexList {
+  id: number
+  line: string
+}
+
+@Options({
+  components: {
+    draggable
+  },
+})
 export default class HelloWorld extends Vue {
-  private msg!: string
-  private input1_config = ''
-  private input2_config = ''
-  private output_config = ''
+  private input1_config: string = ''
+  private input2_config: string = ''
+  private output_config: IndexList[] = []
 
   // TODO: editor部分は別のコンポーネントに分ける
 
   // current_tab_mode: TAB_MODE
-  private current_view_list: string[] = ['']
+  private current_view_list: IndexList[] = []
 
-  private list_all: string[] = ['a', 'l', 'l']
-  private list_ipv4: string[] = ['ip', 'v4']
-  private list_ipv6: string[] = ['']
-  private list_dns: string[] = ['']
-  private list_dhcp: string[] = ['']
-  private list_nat: string[] = ['']
-  private list_other: string[] = ['']
-  private list_filter_ipv4: string[] = ['']
-  private list_filter_ipv6: string[] = ['']
+  private list_all: IndexList[] = []
+  private list_ipv4: IndexList[] = []
+  private list_ipv6: IndexList[] = []
+  private list_dns: IndexList[] = []
+  private list_dhcp: IndexList[] = []
+  private list_nat: IndexList[] = []
+  private list_other: IndexList[] = []
+  private list_filter_ipv4: IndexList[] = []
+  private list_filter_ipv6: IndexList[] = []
 
   private set current_tab_mode(mode: TAB_MODE) {
     switch (mode) {
@@ -182,14 +197,15 @@ export default class HelloWorld extends Vue {
   }
 
   onClickRead() {
-    let temp_string: string[] = []
+    let temp_string: IndexList[] = []
 
-    temp_string = this.input1_config.split('\n')
+    // #がついている行を除外したい
 
-    temp_string = temp_string
+    temp_string = this.input1_config
+      .split('\n')
       .filter((line) => line.slice(0, 1) != '#')
-      .map((line) => {
-        return line
+      .map((it, index) => {
+        return { id: index, line: it }
       })
 
     // 先頭のコマンドごとに辞書に追加する感じ
@@ -199,14 +215,14 @@ export default class HelloWorld extends Vue {
 
     this.list_all = temp_string
 
-    this.input2_config = temp_string.join('\n')
+    this.input2_config = temp_string.map((it) => it.line).join('\n')
 
     console.log(this.list_all)
   }
 
   onClickSave() {
     // this.output_config = this.list_all.join('\n')
-    this.output_config = String(this.current_tab_mode)
+    // this.output_config = String(this.current_tab_mode)
   }
 }
 </script>
