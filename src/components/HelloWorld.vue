@@ -77,7 +77,7 @@ main {
   padding: 0 2%;
 }
 
-.center{
+.center {
   text-align: center;
 }
 
@@ -129,25 +129,25 @@ type TAB_MODE =
   | 'filter_ipv6'
 
 export default class HelloWorld extends Vue {
-  msg!: string
-  input1_config = ''
-  input2_config = ''
-  output_config = ''
+  private msg!: string
+  private input1_config = ''
+  private input2_config = ''
+  private output_config = ''
 
   // TODO: editor部分は別のコンポーネントに分ける
 
   // current_tab_mode: TAB_MODE
-  current_view_list: string[] = ['']
+  private current_view_list: string[] = ['']
 
-  list_all: string[] = ['a', 'l', 'l']
-  list_ipv4: string[] = ['ip', 'v4']
-  list_ipv6: string[] = ['']
-  list_dns: string[] = ['']
-  list_dhcp: string[] = ['']
-  list_nat: string[] = ['']
-  list_other: string[] = ['']
-  list_filter_ipv4: string[] = ['']
-  list_filter_ipv6: string[] = ['']
+  private list_all: string[] = ['a', 'l', 'l']
+  private list_ipv4: string[] = ['ip', 'v4']
+  private list_ipv6: string[] = ['']
+  private list_dns: string[] = ['']
+  private list_dhcp: string[] = ['']
+  private list_nat: string[] = ['']
+  private list_other: string[] = ['']
+  private list_filter_ipv4: string[] = ['']
+  private list_filter_ipv6: string[] = ['']
 
   private set current_tab_mode(mode: TAB_MODE) {
     switch (mode) {
