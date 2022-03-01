@@ -5,26 +5,36 @@
     </header>
     <main>
       <div class="flex-x center">
-        <div id="frame-input">
+        <div id="frame-input flex-y">
           <div>
             <p>入力1</p>
-            <textarea v-model="input1_config" cols="100" rows="10"></textarea>
+            <textarea
+              v-model="input1_config_str"
+              cols="90"
+              rows="10"
+            ></textarea>
           </div>
 
           <button @click="onClickRead">読み込み</button>
-          <button @click="onClickSave">保存</button>
 
           <div>
             <p>コメント行除去</p>
-            <textarea v-model="input2_config" cols="100" rows="10"></textarea>
+            <textarea
+              v-model="input2_config_str"
+              cols="90"
+              rows="10"
+            ></textarea>
           </div>
 
           <p>出力</p>
-          <textarea v-model="output_config" cols="100" rows="10"></textarea>
+
+          <button @click="onClickExport">エディタの設定値を出力</button>
+
+          <textarea v-model="output_config_str" cols="90" rows="10"></textarea>
         </div>
 
         <div id="frame-editor" class="flex-y">
-          <div class="flex center-block">
+          <div class="flex-x center-block">
             <button @click="set_current_view_list(list_all)">all</button>
             <button @click="set_current_view_list(list_ipv4)">ipv4</button>
             <button @click="set_current_view_list(list_ipv6)">ipv6</button>
@@ -121,10 +131,6 @@ main {
   height: 80vh;
   /* width: 100%; */
 }
-
-.flex {
-  display: flex;
-}
 </style>
 <script lang="ts">
 /* eslint-disable no-unused-vars */
@@ -138,9 +144,9 @@ interface IndexList {
 
 @Component({ components: { draggable } })
 export default class HelloWorld extends Vue {
-  input1_config = ''
-  private input2_config = ''
-  private output_config: IndexList[] = []
+  private input1_config_str = ''
+  private input2_config_str = ''
+  private output_config_str = ''
 
   drag = false
 
@@ -150,7 +156,7 @@ export default class HelloWorld extends Vue {
   private current_view_list: IndexList[] = []
 
   private list_all: IndexList[] = []
-  private list_ipv4: IndexList[] = [{ id: 1, line: 'test' }]
+  private list_ipv4: IndexList[] = []
   private list_ipv6: IndexList[] = []
   private list_dns: IndexList[] = []
   private list_dhcp: IndexList[] = []
@@ -168,9 +174,10 @@ export default class HelloWorld extends Vue {
 
     // #がついている行を除外したい
 
-    temp_string = this.input1_config
+    temp_string = this.input1_config_str
       .split('\n')
       .filter((line) => line.slice(0, 1) != '#')
+      .filter((line) => line.slice(0, 1) != '')
       .map((it, index) => {
         return { id: index, line: it }
       })
@@ -181,8 +188,9 @@ export default class HelloWorld extends Vue {
     // TODO: 各コマンドごとに配列に格納する
 
     this.list_all = temp_string
+    this.set_current_view_list(temp_string)
 
-    this.input2_config = temp_string.map((it) => it.line).join('\n')
+    this.input2_config_str = temp_string.map((it) => it.line).join('\n')
 
     console.log(this.list_all)
   }
@@ -190,6 +198,12 @@ export default class HelloWorld extends Vue {
   onClickSave() {
     // this.output_config = this.list_all.join('\n')
     // this.output_config = String(this.current_tab_mode)
+  }
+  onClickExport() {
+    this.output_config_str = this.current_view_list
+      .map((it) => it.line)
+      .join('\n')
+    console.log(this.current_view_list)
   }
 }
 </script>
