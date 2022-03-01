@@ -151,7 +151,7 @@ interface IndexList {
 
 @Component
 export default class HelloWorld extends Vue {
-  input1_config = 'ffgdgf'
+  input1_config = ''
   private input2_config = ''
   private output_config: IndexList[] = []
 
