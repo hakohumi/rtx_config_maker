@@ -152,18 +152,21 @@ export default class HelloWorld extends Vue {
 
   // TODO: editor部分は別のコンポーネントに分ける
 
-  // current_tab_mode: TAB_MODE
+  // エディタに表示させるコマンドが入っているリスト
   private current_view_list: IndexList[] = []
 
+  // 編集中のリスト
   private list_all: IndexList[] = []
+
+  // 知らないコマンドを把握しやすいようにリストごとにコマンドを分割する
   private list_ipv4: IndexList[] = []
   private list_ipv6: IndexList[] = []
   private list_dns: IndexList[] = []
   private list_dhcp: IndexList[] = []
   private list_nat: IndexList[] = []
-  private list_other: IndexList[] = []
   private list_filter_ipv4: IndexList[] = []
   private list_filter_ipv6: IndexList[] = []
+  private list_other: IndexList[] = []
 
   private set_current_view_list(i_list: IndexList[]) {
     this.current_view_list = i_list
@@ -171,8 +174,6 @@ export default class HelloWorld extends Vue {
 
   onClickRead() {
     let temp_string: IndexList[] = []
-
-    // #がついている行を除外したい
 
     temp_string = this.input1_config_str
       .split('\n')
@@ -182,17 +183,34 @@ export default class HelloWorld extends Vue {
         return { id: index, line: it }
       })
 
-    // 先頭のコマンドごとに辞書に追加する感じ
-    // TODO: コマンドごとに行を分類して、分けて表示する
-
     // TODO: 各コマンドごとに配列に格納する
 
     this.list_all = temp_string
     this.set_current_view_list(temp_string)
 
-    this.input2_config_str = temp_string.map((it) => it.line).join('\n')
+    this.parseCommandToList(temp_string)
 
-    console.log(this.list_all)
+    this.input2_config_str = temp_string.map((it) => it.line).join('\n')
+  }
+
+  parseCommandToList(i_commandList: IndexList[]) {
+    // TODO: 完全に各リストに分割する
+    // TODO: filterかどうかの判別条件の簡略化
+    this.list_ipv4 = i_commandList.filter(
+      (it) => it.line.slice(0, 3) == 'ip ' && it.line.slice(3, 6) != 'filter'
+    )
+    this.list_ipv6 = i_commandList.filter((it) => it.line.slice(0, 4) == 'ipv6')
+    this.list_dns = i_commandList.filter((it) => it.line.slice(0, 3) == 'dns')
+    this.list_dhcp = i_commandList.filter((it) => it.line.slice(0, 4) == 'dhcp')
+    this.list_nat = i_commandList.filter((it) => it.line.slice(0, 3) == 'nat')
+    this.list_filter_ipv4 = i_commandList.filter(
+      (it) => it.line.slice(0, 9) == 'ip filter'
+    )
+    this.list_filter_ipv6 = i_commandList.filter(
+      (it) => it.line.slice(0, 11) == 'ipv6 filter'
+    )
+    // TODO: otherのパースの実装
+    // this.list_other = i_commandList.filter((it) => it.line.slice(0, 2) == '')
   }
 
   onClickSave() {
