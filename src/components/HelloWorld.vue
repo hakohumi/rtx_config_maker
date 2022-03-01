@@ -47,17 +47,17 @@
                 <input type="text" :value="item.line" size="150" />
               </div>
             </li>
-            <!-- <draggable
+
+            <draggable
               v-model="current_view_list"
               group="people"
               @start="drag = true"
               @end="drag = false"
             >
-              <div v-for="element in current_view_list" :key="element.id">
-                {{ element.id }}
-                {{ element.line }}
-              </div>
-            </draggable> -->
+              <li v-for="item in current_view_list" :key="item.id">
+                {{ item.line }}
+              </li>
+            </draggable>
           </div>
         </div>
       </div>
@@ -130,8 +130,8 @@ main {
 <script lang="ts">
 /* eslint-disable no-unused-vars */
 // import { Vue } from 'vue-class-component'
-// import draggable from 'vuedraggable'
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import draggable from 'vuedraggable'
 
 type TAB_MODE =
   | 'all'
@@ -149,7 +149,7 @@ interface IndexList {
   line: string
 }
 
-@Component
+@Component({ components: { draggable } })
 export default class HelloWorld extends Vue {
   input1_config = ''
   private input2_config = ''
