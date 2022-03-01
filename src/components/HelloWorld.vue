@@ -4,7 +4,7 @@
       <h1>RTX Config Maker</h1>
     </header>
     <main>
-      <div class="flex center">
+      <div class="flex-x center">
         <div id="frame-input">
           <div>
             <p>入力1</p>
@@ -23,7 +23,7 @@
           <textarea v-model="output_config" cols="100" rows="10"></textarea>
         </div>
 
-        <div id="frame-editor" class="flex-x">
+        <div id="frame-editor" class="flex-y">
           <div class="flex center-block">
             <button @click="set_current_view_list(list_all)">all</button>
             <button @click="set_current_view_list(list_ipv4)">ipv4</button>
@@ -41,21 +41,14 @@
           </div>
 
           <div class="editer-list">
-            <li v-for="item in current_view_list" :key="item.id" class="item">
-              <div>
-                {{ item.id }}
-                <input type="text" :value="item.line" size="150" />
-              </div>
-            </li>
-
             <draggable
               v-model="current_view_list"
               group="people"
               @start="drag = true"
               @end="drag = false"
             >
-              <li v-for="item in current_view_list" :key="item.id">
-                {{ item.line }}
+              <li v-for="item in current_view_list" :key="item.id" class="item">
+                <input type="text" :value="item.line" size="150" />
               </li>
             </draggable>
           </div>
@@ -82,8 +75,9 @@ a {
 .root {
   height: 100vh;
   width: 100vw;
-  margin: 0;
+  margin: 10px;
 }
+
 main {
   /* background-color: #e1edff; */
   display: flex;
@@ -102,15 +96,23 @@ main {
 }
 
 #frame-input {
-  flex-basis: 30%;
+  flex-grow: 1;
+  flex-basis: auto;
+  /* width: 50%; */
 }
 
 #frame-editor {
+  flex-grow: 2;
   flex-basis: auto;
   overflow-x: scroll;
 }
 
 .flex-x {
+  display: flex;
+  flex-direction: row;
+}
+.flex-y {
+  display: flex;
   flex-direction: column;
 }
 
