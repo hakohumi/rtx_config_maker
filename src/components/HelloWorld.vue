@@ -25,30 +25,39 @@
 
         <div id="frame-editor" class="flex-x">
           <div class="flex center-block">
-            <button @click="current_tab_mode = 'all'">all</button>
-            <button @click="current_tab_mode = 'ipv4'">ipv4</button>
-            <button @click="current_tab_mode = 'ipv6'">ipv6</button>
-            <button @click="current_tab_mode = 'dns'">dns</button>
-            <button @click="current_tab_mode = 'dhcp'">dhcp</button>
-            <button @click="current_tab_mode = 'nat'">nat</button>
-            <button @click="current_tab_mode = 'other'">other</button>
-            <button @click="current_tab_mode = 'filter_ipv4'">
+            <button @click="set_current_view_list(list_all)">all</button>
+            <button @click="set_current_view_list(list_ipv4)">ipv4</button>
+            <button @click="set_current_view_list(list_ipv6)">ipv6</button>
+            <button @click="set_current_view_list(list_dns)">dns</button>
+            <button @click="set_current_view_list(list_dhcp)">dhcp</button>
+            <button @click="set_current_view_list(list_nat)">nat</button>
+            <button @click="set_current_view_list(list_other)">other</button>
+            <button @click="set_current_view_list(list_filter_ipv4)">
               filter_ipv4
             </button>
-            <button @click="current_tab_mode = 'filter_ipv6'">
+            <button @click="set_current_view_list(list_filter_ipv6)">
               filter_ipv6
             </button>
           </div>
 
           <div class="editer-list">
-            <draggable v-model="current_view_list" draggable=".item">
-              <li v-for="item in current_view_list" :key="item.id" class="item">
-                <div>
-                  fafafa
-                  <input type="text" :value="item.line" size="150" />
-                </div>
-              </li>
-            </draggable>
+            <li v-for="item in current_view_list" :key="item.id" class="item">
+              <div>
+                {{ item.id }}
+                <input type="text" :value="item.line" size="150" />
+              </div>
+            </li>
+            <!-- <draggable
+              v-model="current_view_list"
+              group="people"
+              @start="drag = true"
+              @end="drag = false"
+            >
+              <div v-for="element in current_view_list" :key="element.id">
+                {{ element.id }}
+                {{ element.line }}
+              </div>
+            </draggable> -->
           </div>
         </div>
       </div>
@@ -120,8 +129,9 @@ main {
 </style>
 <script lang="ts">
 /* eslint-disable no-unused-vars */
-import { Options, Vue } from 'vue-class-component'
-import draggable from 'vuedraggable'
+// import { Vue } from 'vue-class-component'
+// import draggable from 'vuedraggable'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 type TAB_MODE =
   | 'all'
@@ -139,15 +149,13 @@ interface IndexList {
   line: string
 }
 
-@Options({
-  components: {
-    draggable
-  },
-})
+@Component
 export default class HelloWorld extends Vue {
-  private input1_config: string = ''
-  private input2_config: string = ''
+  input1_config = 'ffgdgf'
+  private input2_config = ''
   private output_config: IndexList[] = []
+
+  drag = false
 
   // TODO: editor部分は別のコンポーネントに分ける
 
@@ -155,7 +163,7 @@ export default class HelloWorld extends Vue {
   private current_view_list: IndexList[] = []
 
   private list_all: IndexList[] = []
-  private list_ipv4: IndexList[] = []
+  private list_ipv4: IndexList[] = [{ id: 1, line: 'test' }]
   private list_ipv6: IndexList[] = []
   private list_dns: IndexList[] = []
   private list_dhcp: IndexList[] = []
@@ -164,6 +172,13 @@ export default class HelloWorld extends Vue {
   private list_filter_ipv4: IndexList[] = []
   private list_filter_ipv6: IndexList[] = []
 
+  private set_current_view_list(i_list: IndexList[]) {
+    this.current_view_list = i_list
+  }
+
+  private get current_tab_mode() {
+    return this.current_tab_mode
+  }
   private set current_tab_mode(mode: TAB_MODE) {
     switch (mode) {
       case 'all':
