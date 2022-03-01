@@ -120,29 +120,14 @@ main {
   /* width: 100%; */
 }
 
-.lists {
-}
-
 .flex {
   display: flex;
 }
 </style>
 <script lang="ts">
 /* eslint-disable no-unused-vars */
-// import { Vue } from 'vue-class-component'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import draggable from 'vuedraggable'
-
-type TAB_MODE =
-  | 'all'
-  | 'ipv4'
-  | 'ipv6'
-  | 'dns'
-  | 'dhcp'
-  | 'nat'
-  | 'other'
-  | 'filter_ipv4'
-  | 'filter_ipv6'
 
 interface IndexList {
   id: number
@@ -174,41 +159,6 @@ export default class HelloWorld extends Vue {
 
   private set_current_view_list(i_list: IndexList[]) {
     this.current_view_list = i_list
-  }
-
-  private get current_tab_mode() {
-    return this.current_tab_mode
-  }
-  private set current_tab_mode(mode: TAB_MODE) {
-    switch (mode) {
-      case 'all':
-        this.current_view_list = this.list_all
-        break
-      case 'ipv4':
-        this.current_view_list = this.list_ipv4
-        break
-      case 'ipv6':
-        this.current_view_list = this.list_ipv6
-        break
-      case 'dns':
-        this.current_view_list = this.list_dns
-        break
-      case 'dhcp':
-        this.current_view_list = this.list_dhcp
-        break
-      case 'nat':
-        this.current_view_list = this.list_nat
-        break
-      case 'other':
-        this.current_view_list = this.list_other
-        break
-      case 'filter_ipv4':
-        this.current_view_list = this.list_filter_ipv4
-        break
-      case 'filter_ipv6':
-        this.current_view_list = this.list_filter_ipv6
-        break
-    }
   }
 
   onClickRead() {
