@@ -203,32 +203,43 @@ export default class HelloWorld extends Vue {
   parseCommandToList(i_commandList: IndexList[]) {
     // TODO: 完全に各リストに分割する
     // TODO: filterかどうかの判別条件の簡略化
-    this.list_ipv4 = i_commandList.filter(
-      (it) => it.line.slice(0, 3) == 'ip ' && it.line.slice(3, 6) != 'filter'
-    )
-    this.list_ipv6 = i_commandList.filter((it) => it.line.slice(0, 4) == 'ipv6')
-    this.list_dns = i_commandList.filter((it) => it.line.slice(0, 3) == 'dns')
-    this.list_dhcp = i_commandList.filter((it) => it.line.slice(0, 4) == 'dhcp')
-    this.list_nat = i_commandList.filter((it) => it.line.slice(0, 3) == 'nat')
-    this.list_filter_ipv4 = i_commandList.filter(
-      (it) => it.line.slice(0, 9) == 'ip filter'
-    )
-    this.list_filter_ipv6 = i_commandList.filter(
-      (it) => it.line.slice(0, 11) == 'ipv6 filter'
-    )
-    // TODO: otherのパースの実装
-    // this.list_other = i_commandList.filter((it) => it.line.slice(0, 2) == '')
+
+    let commandList: IndexList[] = [...i_commandList]
+
+    // ipv4 だったら、v4リストに追加して、i_commandListから削除する
+    commandList.forEach((it) => {
+      if (it.line.slice(0, 3) == 'ip ') {
+        console.log(`3,10 ${it.line.slice(3, 10)}`)
+        if (it.line.slice(3, 10) != 'filter ') {
+          this.list_ipv4.push(it)
+        } else {
+          this.list_filter_ipv4.push(it)
+        }
+      } else if (it.line.slice(0, 5) == 'ipv6 ') {
+        if (it.line.slice(0, 5) == 'ipv6 ') {
+          console.log(`5,12 ${it.line.slice(5, 12)}`)
+          if (it.line.slice(5, 12) != 'filter ') {
+            this.list_ipv6.push(it)
+          } else {
+            this.list_filter_ipv6.push(it)
+          }
+        }
+      } else if (it.line.slice(0, 4) == 'dns ') {
+        this.list_dns.push(it)
+      } else if (it.line.slice(0, 5) == 'dhcp ') {
+        this.list_dhcp.push(it)
+      } else if (it.line.slice(0, 4) == 'nat ') {
+        this.list_nat.push(it)
+      } else {
+        this.list_other.push(it)
+      }
+    })
   }
 
-  onClickSave() {
-    // this.output_config = this.list_all.join('\n')
-    // this.output_config = String(this.current_tab_mode)
-  }
   onClickExport() {
     this.output_config_str = this.current_view_list
       .map((it) => it.line)
       .join('\n')
-    console.log(this.current_view_list)
   }
 }
 </script>
