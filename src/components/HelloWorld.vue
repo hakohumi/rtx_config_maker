@@ -3,65 +3,60 @@
     <header>
       <h1>RTX Config Maker</h1>
     </header>
-    <main>
-      <div class="flex-x center">
-        <div id="frame-input flex-y">
-          <div>
-            <p>入力1</p>
-            <textarea
-              v-model="input1_config_str"
-              cols="90"
-              rows="10"
-            ></textarea>
-          </div>
-
+    <main class="flex-x center">
+      <div id="frame-input" class="flex-y">
+        <div class="flex-y flex-grow-0 filex-align-center">
+          <p>入力1</p>
+          <!-- <textarea v-model="input1_config_str" cols="90" rows="10"></textarea> -->
+          <textarea v-model="input1_config_str"></textarea>
           <button @click="onClickRead">読み込み</button>
+        </div>
 
-          <div>
-            <p>コメント行除去</p>
-            <textarea
-              v-model="input2_config_str"
-              cols="90"
-              rows="10"
-            ></textarea>
-          </div>
+        <div class="flex-y flex-grow-0 filex-align-center">
+          <p>コメント行除去</p>
+          <!-- <textarea v-model="input2_config_str" cols="90" rows="10"></textarea> -->
+          <textarea v-model="input2_config_str"></textarea>
+        </div>
 
+        <div class="flex-y flex-grow-0 filex-align-center">
           <p>出力</p>
 
           <button @click="onClickExport">エディタの設定値を出力</button>
 
-          <textarea v-model="output_config_str" cols="90" rows="10"></textarea>
+          <!-- <textarea v-model="output_config_str" cols="90" rows="10"></textarea> -->
+          <textarea v-model="output_config_str"></textarea>
+        </div>
+      </div>
+
+      <div id="frame-editor" class="flex-y">
+        <div class="flex-x center-block">
+          <button @click="set_current_view_list(list_all)">all</button>
+          <button @click="set_current_view_list(list_ipv4)">ipv4</button>
+          <button @click="set_current_view_list(list_ipv6)">ipv6</button>
+          <button @click="set_current_view_list(list_dns)">dns</button>
+          <button @click="set_current_view_list(list_dhcp)">dhcp</button>
+          <button @click="set_current_view_list(list_nat)">nat</button>
+          <button @click="set_current_view_list(list_other)">other</button>
+          <button @click="set_current_view_list(list_filter_ipv4)">
+            filter_ipv4
+          </button>
+          <button @click="set_current_view_list(list_filter_ipv6)">
+            filter_ipv6
+          </button>
         </div>
 
-        <div id="frame-editor" class="flex-y">
-          <div class="flex-x center-block">
-            <button @click="set_current_view_list(list_all)">all</button>
-            <button @click="set_current_view_list(list_ipv4)">ipv4</button>
-            <button @click="set_current_view_list(list_ipv6)">ipv6</button>
-            <button @click="set_current_view_list(list_dns)">dns</button>
-            <button @click="set_current_view_list(list_dhcp)">dhcp</button>
-            <button @click="set_current_view_list(list_nat)">nat</button>
-            <button @click="set_current_view_list(list_other)">other</button>
-            <button @click="set_current_view_list(list_filter_ipv4)">
-              filter_ipv4
-            </button>
-            <button @click="set_current_view_list(list_filter_ipv6)">
-              filter_ipv6
-            </button>
-          </div>
-
-          <div class="editer-list">
-            <draggable
-              v-model="current_view_list"
-              group="people"
-              @start="drag = true"
-              @end="drag = false"
-            >
-              <li v-for="item in current_view_list" :key="item.id" class="item">
-                <input type="text" :value="item.line" size="150" />
-              </li>
-            </draggable>
-          </div>
+        <div class="editer-list">
+          <draggable
+            v-model="current_view_list"
+            group="people"
+            @start="drag = true"
+            @end="drag = false"
+          >
+            <li v-for="item in current_view_list" :key="item.id" class="item">
+              <input type="text" :value="item.line" />
+              <!-- <input type="text" :value="item.line" size="150" /> -->
+            </li>
+          </draggable>
         </div>
       </div>
     </main>
@@ -91,7 +86,7 @@ a {
 main {
   /* background-color: #e1edff; */
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   padding: 0 2%;
 }
 
@@ -107,23 +102,31 @@ main {
 
 #frame-input {
   flex-grow: 1;
+  flex-shrink: 1;
   flex-basis: auto;
   /* width: 50%; */
 }
 
 #frame-editor {
-  flex-grow: 2;
+  flex-grow: 1;
+  flex-shrink: 1;
   flex-basis: auto;
   overflow-x: scroll;
+}
+.flex-grow-0 {
+  flex-grow: 0;
+}
+.filex-align-center {
+  align-items: center;
 }
 
 .flex-x {
   display: flex;
-  flex-direction: row;
+  flex-flow: row nowrap;
 }
 .flex-y {
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
 }
 
 .editer-list {
