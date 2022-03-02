@@ -52,7 +52,11 @@
             @start="drag = true"
             @end="drag = false"
           >
-            <li v-for="item in current_view_list" :key="item.id" class="item">
+            <li
+              v-for="item in current_view_list"
+              :key="item.id"
+              class="item flex-y"
+            >
               <input type="text" :value="item.line" />
               <!-- <input type="text" :value="item.line" size="150" /> -->
             </li>
