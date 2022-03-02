@@ -3,48 +3,60 @@
     <header>
       <h1>RTX Config Maker</h1>
     </header>
-    <main>
-      <div class="flex center">
-        <div id="frame-input">
-          <div>
-            <p>入力1</p>
-            <textarea v-model="input1_config" cols="100" rows="10"></textarea>
-          </div>
-
+    <main class="flex-x center">
+      <div id="frame-input" class="flex-y">
+        <div class="flex-y flex-grow-0 filex-align-center">
+          <p>入力1</p>
+          <!-- <textarea v-model="input1_config_str" cols="90" rows="10"></textarea> -->
+          <textarea v-model="input1_config_str"></textarea>
           <button @click="onClickRead">読み込み</button>
-          <button @click="onClickSave">保存</button>
-
-          <div>
-            <p>コメント行除去</p>
-            <textarea v-model="input2_config" cols="100" rows="10"></textarea>
-          </div>
-
-          <p>出力</p>
-          <textarea v-model="output_config" cols="100" rows="10"></textarea>
         </div>
 
-        <div id="frame-editor" class="flex-x">
-          <div class="flex center-block">
-            <button @click="current_tab_mode = 'all'">all</button>
-            <button @click="current_tab_mode = 'ipv4'">ipv4</button>
-            <button @click="current_tab_mode = 'ipv6'">ipv6</button>
-            <button @click="current_tab_mode = 'dns'">dns</button>
-            <button @click="current_tab_mode = 'dhcp'">dhcp</button>
-            <button @click="current_tab_mode = 'nat'">nat</button>
-            <button @click="current_tab_mode = 'other'">other</button>
-            <button @click="current_tab_mode = 'filter_ipv4'">
-              filter_ipv4
-            </button>
-            <button @click="current_tab_mode = 'filter_ipv6'">
-              filter_ipv6
-            </button>
-          </div>
+        <div class="flex-y flex-grow-0 filex-align-center">
+          <p>コメント行除去</p>
+          <!-- <textarea v-model="input2_config_str" cols="90" rows="10"></textarea> -->
+          <textarea v-model="input2_config_str"></textarea>
+        </div>
 
-          <div class="editer-list">
-            <li v-for="item in current_view_list" :key="item">
-              <input type="text" :value="item" size="150" />
+        <div class="flex-y flex-grow-0 filex-align-center">
+          <p>出力</p>
+
+          <button @click="onClickExport">エディタの設定値を出力</button>
+
+          <!-- <textarea v-model="output_config_str" cols="90" rows="10"></textarea> -->
+          <textarea v-model="output_config_str"></textarea>
+        </div>
+      </div>
+
+      <div id="frame-editor" class="flex-y">
+        <div class="flex-x center-block">
+          <button @click="set_current_view_list(list_all)">all</button>
+          <button @click="set_current_view_list(list_ipv4)">ipv4</button>
+          <button @click="set_current_view_list(list_ipv6)">ipv6</button>
+          <button @click="set_current_view_list(list_dns)">dns</button>
+          <button @click="set_current_view_list(list_dhcp)">dhcp</button>
+          <button @click="set_current_view_list(list_nat)">nat</button>
+          <button @click="set_current_view_list(list_other)">other</button>
+          <button @click="set_current_view_list(list_filter_ipv4)">
+            filter_ipv4
+          </button>
+          <button @click="set_current_view_list(list_filter_ipv6)">
+            filter_ipv6
+          </button>
+        </div>
+
+        <div class="editer-list">
+          <draggable
+            v-model="current_view_list"
+            group="people"
+            @start="drag = true"
+            @end="drag = false"
+          >
+            <li v-for="item in current_view_list" :key="item.id" class="item">
+              <input type="text" :value="item.line" />
+              <!-- <input type="text" :value="item.line" size="150" /> -->
             </li>
-          </div>
+          </draggable>
         </div>
       </div>
     </main>
@@ -68,12 +80,13 @@ a {
 .root {
   height: 100vh;
   width: 100vw;
-  margin: 0;
+  margin: 10px;
 }
+
 main {
   /* background-color: #e1edff; */
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   padding: 0 2%;
 }
 
@@ -88,16 +101,32 @@ main {
 }
 
 #frame-input {
-  flex-basis: 30%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  /* width: 50%; */
 }
 
 #frame-editor {
+  flex-grow: 1;
+  flex-shrink: 1;
   flex-basis: auto;
   overflow-x: scroll;
 }
+.flex-grow-0 {
+  flex-grow: 0;
+}
+.filex-align-center {
+  align-items: center;
+}
 
 .flex-x {
-  flex-direction: column;
+  display: flex;
+  flex-flow: row nowrap;
+}
+.flex-y {
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .editer-list {
@@ -105,108 +134,97 @@ main {
   height: 80vh;
   /* width: 100%; */
 }
-
-.lists {
-}
-
-.flex {
-  display: flex;
-}
 </style>
 <script lang="ts">
 /* eslint-disable no-unused-vars */
-import { Vue } from 'vue-class-component'
+import { Component, Vue } from 'vue-property-decorator'
+import draggable from 'vuedraggable'
 
-type TAB_MODE =
-  | 'all'
-  | 'ipv4'
-  | 'ipv6'
-  | 'dns'
-  | 'dhcp'
-  | 'nat'
-  | 'other'
-  | 'filter_ipv4'
-  | 'filter_ipv6'
+interface IndexList {
+  id: number
+  line: string
+}
 
+@Component({ components: { draggable } })
 export default class HelloWorld extends Vue {
-  private msg!: string
-  private input1_config = ''
-  private input2_config = ''
-  private output_config = ''
+  private input1_config_str = ''
+  private input2_config_str = ''
+  private output_config_str = ''
+
+  drag = false
 
   // TODO: editor部分は別のコンポーネントに分ける
 
-  // current_tab_mode: TAB_MODE
-  private current_view_list: string[] = ['']
+  // エディタに表示させるコマンドが入っているリスト
+  private current_view_list: IndexList[] = []
 
-  private list_all: string[] = ['a', 'l', 'l']
-  private list_ipv4: string[] = ['ip', 'v4']
-  private list_ipv6: string[] = ['']
-  private list_dns: string[] = ['']
-  private list_dhcp: string[] = ['']
-  private list_nat: string[] = ['']
-  private list_other: string[] = ['']
-  private list_filter_ipv4: string[] = ['']
-  private list_filter_ipv6: string[] = ['']
+  // 編集中のリスト
+  private list_all: IndexList[] = []
 
-  private set current_tab_mode(mode: TAB_MODE) {
-    switch (mode) {
-      case 'all':
-        this.current_view_list = this.list_all
-        break
-      case 'ipv4':
-        this.current_view_list = this.list_ipv4
-        break
-      case 'ipv6':
-        this.current_view_list = this.list_ipv6
-        break
-      case 'dns':
-        this.current_view_list = this.list_dns
-        break
-      case 'dhcp':
-        this.current_view_list = this.list_dhcp
-        break
-      case 'nat':
-        this.current_view_list = this.list_nat
-        break
-      case 'other':
-        this.current_view_list = this.list_other
-        break
-      case 'filter_ipv4':
-        this.current_view_list = this.list_filter_ipv4
-        break
-      case 'filter_ipv6':
-        this.current_view_list = this.list_filter_ipv6
-        break
-    }
+  // 知らないコマンドを把握しやすいようにリストごとにコマンドを分割する
+  private list_ipv4: IndexList[] = []
+  private list_ipv6: IndexList[] = []
+  private list_dns: IndexList[] = []
+  private list_dhcp: IndexList[] = []
+  private list_nat: IndexList[] = []
+  private list_filter_ipv4: IndexList[] = []
+  private list_filter_ipv6: IndexList[] = []
+  private list_other: IndexList[] = []
+
+  private set_current_view_list(i_list: IndexList[]) {
+    this.current_view_list = i_list
   }
 
   onClickRead() {
-    let temp_string: string[] = []
+    let temp_string: IndexList[] = []
 
-    temp_string = this.input1_config.split('\n')
-
-    temp_string = temp_string
+    temp_string = this.input1_config_str
+      .split('\n')
       .filter((line) => line.slice(0, 1) != '#')
-      .map((line) => {
-        return line
+      .filter((line) => line.slice(0, 1) != '')
+      .map((it, index) => {
+        return { id: index, line: it }
       })
-
-    // 先頭のコマンドごとに辞書に追加する感じ
-    // TODO: コマンドごとに行を分類して、分けて表示する
 
     // TODO: 各コマンドごとに配列に格納する
 
     this.list_all = temp_string
+    this.set_current_view_list(temp_string)
 
-    this.input2_config = temp_string.join('\n')
+    this.parseCommandToList(temp_string)
 
-    console.log(this.list_all)
+    this.input2_config_str = temp_string.map((it) => it.line).join('\n')
+  }
+
+  parseCommandToList(i_commandList: IndexList[]) {
+    // TODO: 完全に各リストに分割する
+    // TODO: filterかどうかの判別条件の簡略化
+    this.list_ipv4 = i_commandList.filter(
+      (it) => it.line.slice(0, 3) == 'ip ' && it.line.slice(3, 6) != 'filter'
+    )
+    this.list_ipv6 = i_commandList.filter((it) => it.line.slice(0, 4) == 'ipv6')
+    this.list_dns = i_commandList.filter((it) => it.line.slice(0, 3) == 'dns')
+    this.list_dhcp = i_commandList.filter((it) => it.line.slice(0, 4) == 'dhcp')
+    this.list_nat = i_commandList.filter((it) => it.line.slice(0, 3) == 'nat')
+    this.list_filter_ipv4 = i_commandList.filter(
+      (it) => it.line.slice(0, 9) == 'ip filter'
+    )
+    this.list_filter_ipv6 = i_commandList.filter(
+      (it) => it.line.slice(0, 11) == 'ipv6 filter'
+    )
+    // TODO: otherのパースの実装
+    // this.list_other = i_commandList.filter((it) => it.line.slice(0, 2) == '')
   }
 
   onClickSave() {
     // this.output_config = this.list_all.join('\n')
-    this.output_config = String(this.current_tab_mode)
+    // this.output_config = String(this.current_tab_mode)
+  }
+  onClickExport() {
+    this.output_config_str = this.current_view_list
+      .map((it) => it.line)
+      .join('\n')
+    console.log(this.current_view_list)
   }
 }
 </script>
