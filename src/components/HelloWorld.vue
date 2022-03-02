@@ -36,13 +36,13 @@
           <button @click="set_current_view_list(list_dns)">dns</button>
           <button @click="set_current_view_list(list_dhcp)">dhcp</button>
           <button @click="set_current_view_list(list_nat)">nat</button>
-          <button @click="set_current_view_list(list_other)">other</button>
           <button @click="set_current_view_list(list_filter_ipv4)">
             filter_ipv4
           </button>
           <button @click="set_current_view_list(list_filter_ipv6)">
             filter_ipv6
           </button>
+          <button @click="set_current_view_list(list_other)">other</button>
         </div>
 
         <div class="editer-list">
