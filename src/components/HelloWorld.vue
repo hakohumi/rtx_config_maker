@@ -4,7 +4,7 @@
       <h1>RTX Config Maker</h1>
     </header>
     <main class="flex-x center">
-      <div id="frame-input" class="flex-y">
+      <div id="frame-input" class="flex-y filex-align-stretch">
         <div class="flex-y flex-grow-0 filex-align-center">
           <p>入力1</p>
           <!-- <textarea v-model="input1_config_str" cols="90" rows="10"></textarea> -->
@@ -28,8 +28,8 @@
         </div>
       </div>
 
-      <div id="frame-editor" class="flex-y">
-        <div class="flex-x center-block">
+      <div id="frame-editor" class="flex-y filex-align-stretch">
+        <div class="flex-x center-block flex">
           <button @click="set_current_view_list(list_all)">all</button>
           <button @click="set_current_view_list(list_ipv4)">ipv4</button>
           <button @click="set_current_view_list(list_ipv6)">ipv6</button>
@@ -94,21 +94,10 @@ main {
   padding: 0 2%;
 }
 
-.center {
-  text-align: center;
-}
-
-.center-block {
-  width: 80%;
-  margin: 0 auto;
-  justify-content: space-around;
-}
-
 #frame-input {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
-  /* width: 50%; */
 }
 
 #frame-editor {
@@ -117,11 +106,27 @@ main {
   flex-basis: auto;
   overflow-x: scroll;
 }
+
+.center {
+  text-align: center;
+}
+
+.center-block {
+  justify-content: flex-start;
+}
+
 .flex-grow-0 {
   flex-grow: 0;
 }
 .filex-align-center {
   align-items: center;
+}
+.filex-align-stretch {
+  align-items: stretch;
+}
+
+.flex > button {
+  flex-grow: 1;
 }
 
 .flex-x {
