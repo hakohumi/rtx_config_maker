@@ -42,6 +42,7 @@
           <button @click="set_current_view_list(list_filter_ipv6)">
             filter_ipv6
           </button>
+          <button @click="set_current_view_list(list_pp)">pp</button>
           <button @click="set_current_view_list(list_other)">other</button>
         </div>
 
@@ -178,6 +179,7 @@ export default class HelloWorld extends Vue {
   private list_nat: IndexList[] = []
   private list_filter_ipv4: IndexList[] = []
   private list_filter_ipv6: IndexList[] = []
+  private list_pp: IndexList[] = []
   private list_other: IndexList[] = []
 
   private set_current_view_list(i_list: IndexList[]) {
@@ -206,13 +208,13 @@ export default class HelloWorld extends Vue {
   }
 
   parseCommandToList(i_commandList: IndexList[]) {
-    // TODO: 完全に各リストに分割する
-    // TODO: filterかどうかの判別条件の簡略化
+    // TODO: ここのコマンドを実装する http://www.rtpro.yamaha.co.jp/RT/docs/console/syntax.html
 
     let commandList: IndexList[] = [...i_commandList]
 
     // ipv4 だったら、v4リストに追加して、i_commandListから削除する
-    commandList.forEach((it) => {
+    let it: IndexList | undefined
+    while ((it = commandList.shift()) !== undefined) {
       if (it.line.slice(0, 3) == 'ip ') {
         console.log(`3,10 ${it.line.slice(3, 10)}`)
         if (it.line.slice(3, 10) != 'filter ') {
@@ -235,10 +237,26 @@ export default class HelloWorld extends Vue {
         this.list_dhcp.push(it)
       } else if (it.line.slice(0, 4) == 'nat ') {
         this.list_nat.push(it)
+      } else if (it.line.slice(0, 'pp select '.length) == 'pp select ') {
+        this.list_pp.push(it)
+
+        while (commandList?.[0].line.slice(0, 1) == ' ') {
+          const command: IndexList | undefined = commandList.shift()
+          if (command == undefined) {
+            break
+          }
+
+          this.list_pp.push(command)
+        }
+      } else if (
+        it.line.slice(0, 3) == 'pp ' ||
+        it.line.slice(0, 4) == ' pp '
+      ) {
+        this.list_pp.push(it)
       } else {
         this.list_other.push(it)
       }
-    })
+    }
   }
 
   onClickExport() {
