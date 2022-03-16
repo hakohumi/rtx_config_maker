@@ -44,6 +44,7 @@
           </button>
           <button @click="set_current_view_list(list_pp)">pp</button>
           <button @click="set_current_view_list(list_ipsec)">ipsec</button>
+          <button @click="set_current_view_list(list_tunnel)">tunnel</button>
           <button @click="set_current_view_list(list_other)">other</button>
         </div>
 
@@ -180,6 +181,7 @@ export default class HelloWorld extends Vue {
   private list_filter_ipv6: IndexList[] = []
   private list_pp: IndexList[] = []
   private list_ipsec: IndexList[] = []
+  private list_tunnel: IndexList[] = []
   private list_other: IndexList[] = []
 
   private set_current_view_list(i_list: IndexList[]) {
@@ -255,6 +257,8 @@ export default class HelloWorld extends Vue {
         this.list_pp.push(it)
       } else if (it.line.slice(0, 'ipsec '.length) == 'ipsec ') {
         this.list_ipsec.push(it)
+      } else if (it.line.slice(0, 'tunnel '.length) == 'tunnel ') {
+        this.list_tunnel.push(it)
       } else {
         this.list_other.push(it)
       }
