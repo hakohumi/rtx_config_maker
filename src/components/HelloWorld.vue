@@ -43,6 +43,7 @@
             filter_ipv6
           </button>
           <button @click="set_current_view_list(list_pp)">pp</button>
+          <button @click="set_current_view_list(list_ipsec)">ipsec</button>
           <button @click="set_current_view_list(list_other)">other</button>
         </div>
 
@@ -142,11 +143,9 @@ main {
 .editer-list {
   overflow-y: scroll;
   height: 80vh;
-  /* width: 100%; */
 }
 </style>
 <script lang="ts">
-/* eslint-disable no-unused-vars */
 import { Component, Vue } from 'vue-property-decorator'
 import draggable from 'vuedraggable'
 
@@ -180,6 +179,7 @@ export default class HelloWorld extends Vue {
   private list_filter_ipv4: IndexList[] = []
   private list_filter_ipv6: IndexList[] = []
   private list_pp: IndexList[] = []
+  private list_ipsec: IndexList[] = []
   private list_other: IndexList[] = []
 
   private set_current_view_list(i_list: IndexList[]) {
@@ -253,6 +253,8 @@ export default class HelloWorld extends Vue {
         it.line.slice(0, 4) == ' pp '
       ) {
         this.list_pp.push(it)
+      } else if (it.line.slice(0, 'ipsec '.length) == 'ipsec ') {
+        this.list_ipsec.push(it)
       } else {
         this.list_other.push(it)
       }
