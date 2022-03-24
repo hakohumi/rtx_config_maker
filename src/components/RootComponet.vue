@@ -117,12 +117,18 @@ main {
   flex-basis: auto;
   overflow-x: scroll;
 }
-
+#category-list {
+  display: flex;
+  flex-flow: row wrap;
+}
 .flex-y {
   display: flex;
   flex-flow: column nowrap;
 }
-
+.flex-x-nowrap {
+  display: flex;
+  flex-flow: row nowrap;
+}
 .center {
   text-align: center;
 }
@@ -137,11 +143,6 @@ main {
 
 .flex > button {
   flex-grow: 1;
-}
-
-.flex-x {
-  display: flex;
-  flex-flow: row nowrap;
 }
 
 .editer-list {
