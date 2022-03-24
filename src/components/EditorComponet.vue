@@ -22,7 +22,7 @@ const setList = (value: IndexList[]) => {
 
 <template>
   <div id="frame-editor">
-    <div id="category-list" class="center-block flex">
+    <div id="category-list" class="flex-x-wrap center-block">
       <button @click="setList(commandHolder.list_all.value)">all</button>
       <button @click="setList(commandHolder.list_ipv6.value)">ipv6</button>
       <button @click="setList(props.commandHolder.list_ipv4.value)">
@@ -74,9 +74,6 @@ const setList = (value: IndexList[]) => {
   display: flex;
   align-items: stretch;
   flex-flow: column nowrap;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: auto;
   /* overflow-x: scroll; */
 }
 #category-list {
@@ -86,6 +83,11 @@ const setList = (value: IndexList[]) => {
 .flex-y {
   display: flex;
   flex-flow: column nowrap;
+}
+
+.flex-x-wrap {
+  display: flex;
+  flex-flow: row wrap;
 }
 .flex-x-nowrap {
   display: flex;
@@ -99,15 +101,11 @@ const setList = (value: IndexList[]) => {
   align-items: center;
 }
 
-.flex > button {
-  flex-grow: 1;
-}
 .center-block {
   justify-content: flex-start;
 }
 
 .editer-list {
   overflow-y: scroll;
-  height: 80vh;
 }
 </style>

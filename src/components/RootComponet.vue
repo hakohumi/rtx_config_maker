@@ -24,11 +24,13 @@ const setList = (list: IndexList[]) => {
     </header>
     <main class="flex-x-nowrap center">
       <InputComponet
+        class="frame-input padding_x"
         :command-holder="commandHolder"
         :current_view_list="current_view_list"
       ></InputComponet>
 
       <EditorComponet
+        class="frame-editor padding_x"
         :command-holder="commandHolder"
         :current_view_list="current_view_list"
         @set-list="setList"
@@ -51,9 +53,7 @@ a {
 }
 
 .root {
-  height: 100vh;
-  width: 100vw;
-  margin: 10px;
+  padding: 10px;
 }
 
 main {
@@ -63,14 +63,28 @@ main {
   padding: 0 2%;
 }
 
+.frame-input {
+  flex-grow: 2;
+  flex-shrink: 2;
+  /* flex-basis: auto; */
+}
+
+.frame-editor {
+  flex-grow: 3;
+  flex-shrink: 3;
+  flex-basis: auto;
+}
+
 .flex-x-nowrap {
   display: flex;
   flex-flow: row nowrap;
 }
 
+.padding_x{
+  padding: 0px 10px;
+}
+
 .center {
   text-align: center;
 }
-
-
 </style>

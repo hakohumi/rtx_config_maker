@@ -103,19 +103,19 @@ const onClickExport = () => {
 </script>
 
 <template>
-  <div id="frame-input" class="flex-y flex-align-stretch">
-    <div class="flex-y-stretch">
+  <div class="flex-y-nowrap">
+    <div class="flex-y-nowrap flex-align-center">
       <p>入力1</p>
       <textarea v-model="input1_config_str"></textarea>
       <button @click="onClickRead">読み込み</button>
     </div>
 
-    <div class="flex-y-stretch">
+    <div class="flex-y-nowrap flex-align-center">
       <p>コメント行除去</p>
       <textarea v-model="input2_config_str"></textarea>
     </div>
 
-    <div class="flex-y-stretch">
+    <div class="flex-y-nowrap flex-align-center">
       <p>出力</p>
 
       <button @click="onClickExport">エディタの設定値を出力</button>
@@ -126,17 +126,21 @@ const onClickExport = () => {
 </template>
 
 <style scoped>
-
-#frame-input {
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: auto;
-}
-
-.flex-y-stretch {
+.flex-y-nowrap {
   display: flex;
   flex-flow: column nowrap;
+}
+
+.flex-grow-0 {
   flex-grow: 0;
+}
+.flex-grow-1 {
+  flex-grow: 1;
+}
+.flex-align-stretch {
   align-items: stretch;
+}
+.flex-align-center {
+  align-items: center;
 }
 </style>
