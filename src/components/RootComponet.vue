@@ -126,21 +126,21 @@ const onClickExport = () => {
       <h1>RTX Config Maker</h1>
     </header>
     <main class="flex-x center">
-      <div id="frame-input" class="flex-y filex-align-stretch">
-        <div class="flex-y flex-grow-0 filex-align-center">
+      <div id="frame-input" class="flex-y flex-align-stretch">
+        <div class="flex-y flex-grow-0 flex-align-stretch">
           <p>入力1</p>
           <!-- <textarea v-model="input1_config_str" cols="90" rows="10"></textarea> -->
           <textarea v-model="input1_config_str"></textarea>
           <button @click="onClickRead">読み込み</button>
         </div>
 
-        <div class="flex-y flex-grow-0 filex-align-center">
+        <div class="flex-y flex-grow-0 flex-align-stretch">
           <p>コメント行除去</p>
           <!-- <textarea v-model="input2_config_str" cols="90" rows="10"></textarea> -->
           <textarea v-model="input2_config_str"></textarea>
         </div>
 
-        <div class="flex-y flex-grow-0 filex-align-center">
+        <div class="flex-y flex-grow-0 flex-align-stretch">
           <p>出力</p>
 
           <button @click="onClickExport">エディタの設定値を出力</button>
@@ -150,7 +150,7 @@ const onClickExport = () => {
         </div>
       </div>
 
-      <div id="frame-editor" class="flex-y filex-align-stretch">
+      <div id="frame-editor" class="flex-y flex-align-stretch">
         <div class="flex-x center-block flex">
           <button @click="setList(list_all)">all</button>
           <button @click="setList(list_ipv4)">ipv4</button>
@@ -236,10 +236,10 @@ main {
 .flex-grow-0 {
   flex-grow: 0;
 }
-.filex-align-center {
+.flex-align-center {
   align-items: center;
 }
-.filex-align-stretch {
+.flex-align-stretch {
   align-items: stretch;
 }
 
