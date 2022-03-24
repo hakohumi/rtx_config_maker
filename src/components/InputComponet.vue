@@ -126,6 +126,13 @@ const onClickExport = () => {
 </template>
 
 <style scoped>
+
+#frame-input {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+
 .flex-y-stretch {
   display: flex;
   flex-flow: column nowrap;
