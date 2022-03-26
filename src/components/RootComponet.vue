@@ -5,8 +5,6 @@ import { IndexList } from './IndexList'
 import { CommandHolder } from './CommandHolder'
 import EditorComponet from './EditorComponet.vue'
 
-// TODO: editor部分は別のコンポーネントに分ける
-
 // エディタに表示させるコマンドが入っているリスト
 const current_view_list = ref<IndexList[]>([])
 
