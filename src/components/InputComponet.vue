@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
 import { CommandHolder } from './CommandHolder'
 import { IndexList } from './IndexList'
+import AutoResizeTextarea from './AutoResizeTextarea.vue/AutoResizeTextarea.vue'
 
 let input1_config_str = ref('')
 let input2_config_str = ref('')
@@ -52,6 +53,7 @@ const onClickExport = () => {
     <div class="flex-y-nowrap flex-align-center">
       <p>入力1</p>
       <textarea v-model="input1_config_str"></textarea>
+      <AutoResizeTextarea :value="input1_config_str"> </AutoResizeTextarea>
       <button @click="onClickRead">読み込み</button>
     </div>
 
